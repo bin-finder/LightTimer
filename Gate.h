@@ -29,13 +29,13 @@ class Gate{
 
     /**
     * @brief This checks for rising edge.
-    * @return True if the gate is blocked, and False if not. (obviously).
+    * @return True if rising edge is detected.
     */
     bool checkRisingEdge();
 
     /**
     * @brief This checks for falling edge.
-    * @return True if the gate is blocked, and False if not. (obviously).
+    * @return True if falling edge is detected.
     */
     bool checkFallingEdge();
 
