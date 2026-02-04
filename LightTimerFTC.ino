@@ -34,7 +34,6 @@ void loop() {
       gateOne->updateGate();
       if(gateOne->checkFallingEdge()){
         startTime = micros();
-        //Serial.println("/1");
         state = 2;
       }
       break;
@@ -42,10 +41,8 @@ void loop() {
     //wait for gate 2
     case 2:
       gateTwo->updateGate();
-      //Serial.println(gateTwo.getGateVal());
       if(gateTwo->checkFallingEdge()){
         endTime = micros();
-        //Serial.println("/2");
         state = 3;
       }
       break;
