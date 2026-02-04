@@ -15,8 +15,8 @@ unsigned long endTime;
 Gate topGate(topGateInput, topGateOutput, topGateMinSlope);
 Gate bottomGate(bottomGateInput, bottomGateOutput, bottomGateMinSlope);
 
-Gate* gateOne = &topGate;
-Gate* gateTwo = &bottomGate;
+Gate* gateOne = &bottomGate;
+Gate* gateTwo = &topGate;
 
 void setup() {
   // put your setup code here, to run once:
@@ -31,8 +31,8 @@ void loop() {
 
     //wait for gate 1
     case 1:
-      gateOne.updateGate();
-      if(gateOne.checkFallingEdge()){
+      gateOne->updateGate();
+      if(gateOne->checkFallingEdge()){
         startTime = micros();
         //Serial.println("/1");
         state = 2;
@@ -41,9 +41,9 @@ void loop() {
 
     //wait for gate 2
     case 2:
-      gateTwo.updateGate();
+      gateTwo->updateGate();
       //Serial.println(gateTwo.getGateVal());
-      if(gateTwo.checkFallingEdge()){
+      if(gateTwo->checkFallingEdge()){
         endTime = micros();
         //Serial.println("/2");
         state = 3;
@@ -60,8 +60,8 @@ void loop() {
     //Debug Case. This will turn on the IR
     //leds for there to be some signal
     case 4:
-      gateOneturnOnLed();
-      gateTwo.turnOnLed();
+      gateOne->turnOnLed();
+      gateTwo->turnOnLed();
       state = 5;
       break;
 
