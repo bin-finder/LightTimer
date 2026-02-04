@@ -1,7 +1,7 @@
 #include "Gate.h"
 
-Gate::Gate(int threshIn, int gatePinInputIn, int gatePinOutputIn)
-  : threshold(threshIn), gatePinInput(gatePinInputIn), gatePinOutput(gatePinOutputIn) {
+Gate::Gate(int gatePinInputIn, int gatePinOutputIn, int minSlopeIn)
+  : gatePinInput(gatePinInputIn), gatePinOutput(gatePinOutputIn), minSlope(minSlopeIn) {
   pinMode(gatePinOutput, OUTPUT);
   digitalWrite(gatePinOutput, LOW);
   prevGateVal = analogRead(gatePinInput);
@@ -36,4 +36,8 @@ void Gate::turnOnLed() {
 
 void Gate::turnOffLed() {
   digitalWrite(gatePinOutput, LOW);
+}
+
+int Gate::getGateVal(){
+  return gateVal;
 }

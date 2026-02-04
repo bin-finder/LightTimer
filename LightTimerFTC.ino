@@ -2,24 +2,26 @@
 
 const int startState = 1;
 int state;
-const int gateOneInput = A0;
-const int gateTwoInput = A1;
-const int gateOneOutput = 2;
-const int gateTwoOutput = 3;
-int gateOneThreshold = 440;
-int gateTwoThreshold = 440;
+const int topGateInput = A1;
+const int bottomGateInput = A0;
+const int topGateOutput = 2;
+const int bottomGateOutput = 3;
+const int topGateMinSlope = 50;
+const int bottomGateMinSlope = 10;
 
 unsigned long startTime;
 unsigned long endTime;
 
-const double gateDist = 2.0; //10 cm
+Gate topGate(topGateInput, topGateOutput, topGateMinSlope);
+Gate bottomGate(bottomGateInput, bottomGateOutput, bottomGateMinSlope);
 
-Gate gateOne(gateOneThreshold, gateOneInput, gateOneOutput);
-Gate gateTwo(gateTwoThreshold, gateTwoInput, gateTwoOutput);
+Gate* gateOne = &topGate;
+Gate* gateTwo = &bottomGate;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  Serial.println("Welcome to the Calabrtron 2000!\nI hope it works!\n\nTime: u sec");
   state = startState;
 }
 
@@ -29,9 +31,10 @@ void loop() {
 
     //wait for gate 1
     case 1:
-    gateOne.updateGate();
+      gateOne.updateGate();
       if(gateOne.checkFallingEdge()){
         startTime = micros();
+        //Serial.println("/1");
         state = 2;
       }
       break;
@@ -39,34 +42,38 @@ void loop() {
     //wait for gate 2
     case 2:
       gateTwo.updateGate();
+      //Serial.println(gateTwo.getGateVal());
       if(gateTwo.checkFallingEdge()){
         endTime = micros();
+        //Serial.println("/2");
         state = 3;
       }
       break;
 
     //compute, and send it!
     case 3:{
-      double speed = gateDist/((endTime - startTime)/(1000000.0));
-      Serial.println(speed);
-      delay(10); //give ADC time to settle after read.
+      Serial.println(endTime - startTime);
       state = 1;
       break;
     }
 
+    //Debug Case. This will turn on the IR
+    //leds for there to be some signal
     case 4:
-      gateOne.turnOnLed();
+      gateOneturnOnLed();
       gateTwo.turnOnLed();
       state = 5;
       break;
 
+    //debug case. Set Case to 5 on build to debug inputs.
     case 5:
-      Serial.print(analogRead(gateOneInput));
+      Serial.print(analogRead(topGateInput));
       Serial.print(",");
-      Serial.println(analogRead(gateTwoInput));
+      Serial.println(analogRead(bottomGateInput));
       delay(25);
       break;
 
   }
+  delay(10);
 
 }

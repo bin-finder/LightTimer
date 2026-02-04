@@ -10,12 +10,11 @@
 
 class Gate{
   private:
-    const int threshold;
     const int gatePinInput;
     const int gatePinOutput;
     int gateVal;
     int prevGateVal;
-    const int minSlope = 50 ;//to be an edge, a line must have a slope bigger then 100.
+    int minSlope;//to be an edge, a line must have a slope bigger then this
   
   public:
 
@@ -25,7 +24,7 @@ class Gate{
     * @param gatePinInputIn The photosistor analog input pin.
     * @param gatePinOutputIn The LED output pin. cooper was here :D
     */
-    Gate(int threshIn,int gatePinInputIn, int gatePinOutputIn);
+    Gate(int gatePinInputIn, int gatePinOutputIn, int minSlopeIn);
 
     /**
     * @brief This checks for rising edge.
@@ -50,6 +49,8 @@ class Gate{
     void turnOnLed();
 
     void turnOffLed();
+
+    int getGateVal();
 };
 
 #endif
