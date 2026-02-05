@@ -6,8 +6,16 @@ const int topGateInput = A1;
 const int bottomGateInput = A0;
 const int topGateOutput = 2;
 const int bottomGateOutput = 3;
-const int topGateMinSlope = 50;
-const int bottomGateMinSlope = 10;
+const int topGateMinSlope = 20;
+const int bottomGateMinSlope = 5;
+
+//The max time allowed to wait for gate 2 trigger.
+const int timeout = 1;
+
+//The time increment that must pass inorder to check for a new event.
+const int delayTime = 1;
+
+const int loopDelay = 0.5;
 
 unsigned long startTime;
 unsigned long endTime;
@@ -45,12 +53,19 @@ void loop() {
         endTime = micros();
         state = 3;
       }
+
+      //Check for a timeout to revert back to gate one if false trigger.
+      if(micros() - startTime > timeout * 1000000){
+        state = 1;
+      }
+
       break;
 
     //compute, and send it!
     case 3:{
       Serial.println(endTime - startTime);
       state = 1;
+      delay(delayTime * 1000);
       break;
     }
 
@@ -67,10 +82,9 @@ void loop() {
       Serial.print(analogRead(topGateInput));
       Serial.print(",");
       Serial.println(analogRead(bottomGateInput));
-      delay(25);
       break;
 
   }
-  delay(10);
+  delay(loopDelay);
 
 }
